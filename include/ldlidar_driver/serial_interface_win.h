@@ -24,6 +24,7 @@
 #include <string>
 #include <thread>
 #include <vector>
+#include <functional>
 
 struct PortInfo {
   std::string name;

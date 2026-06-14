@@ -1,3 +1,5 @@
+# Modified version of : https://github.com/ldrobotSensorTeam/ldlidar_sdk
+
 # LDLiDAR SDK
 This SDK is only applicable to the LiDAR products sold by Shenzhen LDROBOT Co., LTD. 
 |    product models      |  range types |

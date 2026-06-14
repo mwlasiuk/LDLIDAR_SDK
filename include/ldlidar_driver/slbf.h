@@ -19,41 +19,43 @@
  * limitations under the License.
  */
 #ifndef __SLBF_H_
-#define __SLBF_H_
+    #define __SLBF_H_
 
-#include <math.h>
+    #include <math.h>
 
-#include <algorithm>
+    #include <algorithm>
 
-#include "ldlidar_driver/ldlidar_datatype.h"
+    #include "ldlidar_driver/ldlidar_datatype.h"
 
-namespace ldlidar {
+namespace ldlidar
+{
 
-class Slbf {
-private:
-  const int kConfidenceHigh = 200;
-  const int kConfidenceMiddle = 150;
-  const int kConfidenceLow = 92;
-  const int kScanFre = 2300;  // Default scanning frequency,
-                              // which can be changed according to radar protocol
-  double curr_speed_;
-  bool enable_strict_policy_;  // whether strict filtering is enabled within 300
-                               // mm, the effective value may be lost, and the
-                               // time sequence of recharging needs to be
-                               // disabled
-  Slbf() = delete;
-  Slbf(const Slbf &) = delete;
-  Slbf &operator=(const Slbf &) = delete;
+    class Slbf
+    {
+    private:
+        const int kConfidenceHigh   = 200;
+        const int kConfidenceMiddle = 150;
+        const int kConfidenceLow    = 92;
+        const int kScanFre          = 2300; // Default scanning frequency,
+                                            // which can be changed according to radar protocol
+        double curr_speed_;
+        bool   enable_strict_policy_; // whether strict filtering is enabled within 300
+                                      // mm, the effective value may be lost, and the
+                                      // time sequence of recharging needs to be
+                                      // disabled
+        Slbf()                       = delete;
+        Slbf(const Slbf&)            = delete;
+        Slbf& operator=(const Slbf&) = delete;
 
-public:
-  Slbf(int speed, bool strict_policy = true);
-  Points2D NearFilter(const Points2D &tmp) const;
-  void EnableStrictPolicy(bool enable);
-  ~Slbf();
-};
+    public:
+        Slbf(int speed, bool strict_policy = true);
+        Points2D NearFilter(const Points2D& tmp) const;
+        void     EnableStrictPolicy(bool enable);
+        ~Slbf();
+    };
 
 } // namespace ldlidar
 
-#endif  // __SLBF_H_
-/********************* (C) COPYRIGHT SHENZHEN LDROBOT CO., LTD *******END OF
- * FILE ********/
+#endif // __SLBF_H_
+       /********************* (C) COPYRIGHT SHENZHEN LDROBOT CO., LTD *******END OF
+        * FILE ********/

@@ -2,7 +2,7 @@
  * @file ldlidar_driver.cpp
  * @author LDRobot (support@ldrobot.com)
  * @brief  ldlidar sdk interface
- *         This code is only applicable to LDROBOT LiDAR products 
+ *         This code is only applicable to LDROBOT LiDAR products
  * sold by Shenzhen LDROBOT Co., LTD
  * @version 0.1
  * @date 2021-05-12
@@ -20,32 +20,35 @@
  */
 #include "ldlidar_driver/ldlidar_driver.h"
 
-namespace ldlidar {
+namespace ldlidar
+{
 
-bool LDLidarDriver::is_ok_ = false;
+    bool LDLidarDriver::is_ok_ = false;
 
-LDLidarDriver::LDLidarDriver() : 
-  is_start_flag_(false),
-  is_connect_flag_(false),
-  sdk_pack_version_(LDLiDAR_SDK_VERSION_NUMBER) {
+    LDLidarDriver::LDLidarDriver() : is_start_flag_(false),
+                                     is_connect_flag_(false),
+                                     sdk_pack_version_(LDLiDAR_SDK_VERSION_NUMBER)
+    {
+    }
 
-}
+    LDLidarDriver::~LDLidarDriver()
+    {
+    }
 
-LDLidarDriver::~LDLidarDriver() {
+    std::string LDLidarDriver::GetLidarSdkVersionNumber(void)
+    {
+        return sdk_pack_version_;
+    }
 
-}
+    bool LDLidarDriver::Ok()
+    {
+        return is_ok_;
+    }
 
-std::string LDLidarDriver::GetLidarSdkVersionNumber(void) {
-  return sdk_pack_version_;
-}
-
-bool LDLidarDriver::Ok() {
-  return is_ok_; 
-}
-
-void LDLidarDriver::SetLidarDriverStatus(bool status) {
-  is_ok_ = status;
-}
+    void LDLidarDriver::SetLidarDriverStatus(bool status)
+    {
+        is_ok_ = status;
+    }
 
 } // namespace ldlidar
 /********************* (C) COPYRIGHT SHENZHEN LDROBOT CO., LTD *******END OF

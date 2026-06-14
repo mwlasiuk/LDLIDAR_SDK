@@ -21,105 +21,120 @@
 #include <Windows.h>
 
 #include <atomic>
+#include <functional>
 #include <string>
 #include <thread>
 #include <vector>
-#include <functional>
 
-struct PortInfo {
-  std::string name;
-  std::string description;
-  std::string pid;
-  std::string vid;
+struct PortInfo
+{
+    std::string name;
+    std::string description;
+    std::string pid;
+    std::string vid;
 };
 
-enum class BaudRate {
-  Baud1200 = 1200,
-  Baud2400 = 2400,
-  Baud4800 = 4800,
-  Baud9600 = 9600,
-  Baud19200 = 19200,
-  Baud38400 = 38400,
-  Baud57600 = 57600,
-  Baud115200 = 115200,
-  Baud230400 = 230400,
-  Unknonw = -1
+enum class BaudRate
+{
+    Baud1200   = 1200,
+    Baud2400   = 2400,
+    Baud4800   = 4800,
+    Baud9600   = 9600,
+    Baud19200  = 19200,
+    Baud38400  = 38400,
+    Baud57600  = 57600,
+    Baud115200 = 115200,
+    Baud230400 = 230400,
+    Unknonw    = -1
 };
-enum class DataBits {
-  Data5 = 5,
-  Data6 = 6,
-  Data7 = 7,
-  Data8 = 8,
-  Unknonw = -1
+enum class DataBits
+{
+    Data5   = 5,
+    Data6   = 6,
+    Data7   = 7,
+    Data8   = 8,
+    Unknonw = -1
 };
-enum class FlowControl {
-  NoFlowControl,
-  HardwareControl,
-  SoftwareControl,
-  Unknonw = -1
+enum class FlowControl
+{
+    NoFlowControl,
+    HardwareControl,
+    SoftwareControl,
+    Unknonw = -1
 };
-enum class Parity {
-  NoParity,
-  EvenParity,
-  OddParity,
-  SpaceParity,
-  MarkParity,
-  Unknonw = -1
+enum class Parity
+{
+    NoParity,
+    EvenParity,
+    OddParity,
+    SpaceParity,
+    MarkParity,
+    Unknonw = -1
 };
-enum class StopBits { OneStop = 0, TwoStop, OneAndHalfStop, Unknow };
-
-struct PortParams {
-  std::string portName;
-  BaudRate baudrate = BaudRate::Baud115200;
-  Parity parity = Parity::NoParity;
-  DataBits dataBits = DataBits::Data8;
-  StopBits stopBits = StopBits::OneStop;
-  FlowControl flowControl = FlowControl::NoFlowControl;
+enum class StopBits
+{
+    OneStop = 0,
+    TwoStop,
+    OneAndHalfStop,
+    Unknow
 };
 
-class SerialInterfaceWin {
- public:
-  SerialInterfaceWin();
-  ~SerialInterfaceWin();
+struct PortParams
+{
+    std::string portName;
+    BaudRate    baudrate    = BaudRate::Baud115200;
+    Parity      parity      = Parity::NoParity;
+    DataBits    dataBits    = DataBits::Data8;
+    StopBits    stopBits    = StopBits::OneStop;
+    FlowControl flowControl = FlowControl::NoFlowControl;
+};
 
-  static bool availablePorts(std::vector<PortInfo> &availabelPortInfo);
-  bool open(std::string port_name);
-  bool close();
-  bool write(const char *tx_buf, uint32_t tx_buf_len);
-  int readAll();
-  long long rxLength() { return mRxCounter; }
-  long long txLength() { return mTxCounter; }
-  void clearRxLength(void) { mRxCounter = 0; }
-  bool isOpen() { return mIsOpened; }
-  void setBufferSize(size_t size) { mMaxBuffSize = size; }
-  void setCommErrorCallback(std::function<void(std::string)> callback) {
-    commErrorHandle = callback;
-  }
-  void setReadCallback(
-      std::function<void(const char *, size_t length)> callback) {
-    readCallback = callback;
-  }
+class SerialInterfaceWin
+{
+public:
+    SerialInterfaceWin();
+    ~SerialInterfaceWin();
 
-  void setPortParams(PortParams params);
-  PortParams currPortParams(void);
+    static bool availablePorts(std::vector<PortInfo>& availabelPortInfo);
+    bool        open(std::string port_name);
+    bool        close();
+    bool        write(const char* tx_buf, uint32_t tx_buf_len);
+    int         readAll();
+    long long   rxLength() { return mRxCounter; }
+    long long   txLength() { return mTxCounter; }
+    void        clearRxLength(void) { mRxCounter = 0; }
+    bool        isOpen() { return mIsOpened; }
+    void        setBufferSize(size_t size) { mMaxBuffSize = size; }
+    void        setCommErrorCallback(std::function<void(std::string)> callback)
+    {
+        commErrorHandle = callback;
+    }
+    void setReadCallback(
+        std::function<void(const char*, size_t length)> callback)
+    {
+        readCallback = callback;
+    }
 
- private:
-  bool mIsOpened;
-  HANDLE mComHandle;
-  std::thread *mRxThread;
-  static void rxThreadProc(SerialInterfaceWin *pClass);
-  size_t mByteToRead;
-  long long mRxCounter;
-  long long mTxCounter;
-  size_t mMaxBuffSize;
-  OVERLAPPED mOverlappedSend;
-  OVERLAPPED mOverlappedRecv;
-  std::atomic<bool> mRxThreadRunFlag;
+    void       setPortParams(PortParams params);
+    PortParams currPortParams(void);
 
-  std::function<void(std::string)> commErrorHandle;
-  std::function<void(const char *, size_t length)> readCallback;
+private:
+    bool              mIsOpened;
+    HANDLE            mComHandle;
+    std::thread*      mRxThread;
+    static void       rxThreadProc(SerialInterfaceWin* pClass);
+    size_t            mByteToRead;
+    long long         mRxCounter;
+    long long         mTxCounter;
+    size_t            mMaxBuffSize;
+    OVERLAPPED        mOverlappedSend;
+    OVERLAPPED        mOverlappedRecv;
+    std::atomic<bool> mRxThreadRunFlag;
 
-  PortParams portParams;
+    std::function<void(std::string)>                commErrorHandle;
+    std::function<void(const char*, size_t length)> readCallback;
+
+    PortParams portParams;
 };
 
 /********************* (C) COPYRIGHT LD Robot *******END OF FILE ********/

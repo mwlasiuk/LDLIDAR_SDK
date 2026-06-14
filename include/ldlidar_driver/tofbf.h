@@ -2,7 +2,7 @@
  * @file tofbf.h
  * @author LDRobot (support@ldrobot.com)
  * @brief  LiDAR near-range filtering algorithm
- *         This code is only applicable to LDROBOT LiDAR LD06 products 
+ *         This code is only applicable to LDROBOT LiDAR LD06 products
  * sold by Shenzhen LDROBOT Co., LTD
  * @version 0.1
  * @date 2021-10-28
@@ -20,51 +20,54 @@
  */
 
 #ifndef __TOFBF_H_
-#define __TOFBF_H_
+    #define __TOFBF_H_
 
-#include <stdint.h>
+    #include <stdint.h>
 
-#include <vector>
-#include <math.h>
+    #include <math.h>
+    #include <vector>
 
-#include <algorithm>
-#include <iostream>
+    #include <algorithm>
+    #include <iostream>
 
-#include "ldlidar_driver/ldlidar_datatype.h"
+    #include "ldlidar_driver/ldlidar_datatype.h"
 
-namespace ldlidar {
+namespace ldlidar
+{
 
-enum class FilterType{
-  NO_FILTER,
-  NEAR_FILTER,
-  NOISE_FILTER
-};
+    enum class FilterType
+    {
+        NO_FILTER,
+        NEAR_FILTER,
+        NOISE_FILTER
+    };
 
-class Tofbf {
- public:
-  Tofbf(int speed, LDType type);
-  ~Tofbf();
-  std::vector<PointData> Filter(const std::vector<PointData> &tmp) const;
+    class Tofbf
+    {
+    public:
+        Tofbf(int speed, LDType type);
+        ~Tofbf();
+        std::vector<PointData> Filter(const std::vector<PointData>& tmp) const;
 
- private:
-  FilterType filter_type_;
-  // Low intensity threshold
-  int intensity_low_;
-  // Discrete points require higher intensity
-  int intensity_single_;
-  // Default scan frequency, to change, read according to radar protocol
-  int scan_frequency_;
-  double curr_speed_;
-  Tofbf() = delete;
-  Tofbf(const Tofbf &) = delete;
-  Tofbf &operator=(const Tofbf &) = delete;
-  std::vector<PointData> NearFilter(const std::vector<PointData> &tmp) const;
-  std::vector<PointData> NoiseFilter(const std::vector<PointData> &tmp) const;
-};
+    private:
+        FilterType filter_type_;
+        // Low intensity threshold
+        int intensity_low_;
+        // Discrete points require higher intensity
+        int intensity_single_;
+        // Default scan frequency, to change, read according to radar protocol
+        int    scan_frequency_;
+        double curr_speed_;
+        Tofbf()                                        = delete;
+        Tofbf(const Tofbf&)                            = delete;
+        Tofbf&                 operator=(const Tofbf&) = delete;
+        std::vector<PointData> NearFilter(const std::vector<PointData>& tmp) const;
+        std::vector<PointData> NoiseFilter(const std::vector<PointData>& tmp) const;
+    };
 
 } // namespace ldlidar
 
-#endif  //__TOFBF_H_
+#endif //__TOFBF_H_
 
 /********************* (C) COPYRIGHT SHENZHEN LDROBOT CO., LTD *******END OF
  * FILE ********/

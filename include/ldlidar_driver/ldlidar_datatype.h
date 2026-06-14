@@ -56,7 +56,7 @@ namespace ldlidar
     enum class LidarStatus
     {
         NORMAL,        /* 雷达正常,可获取点云数据 */
-        ERROR,         /* 表明雷达出现异常错误，可获取雷达反馈的错误码了解具体错误 */
+        FATAL,         /* 表明雷达出现异常错误，可获取雷达反馈的错误码了解具体错误 */
         DATA_TIME_OUT, /* 雷达点云数据包发布超时 */
         DATA_WAIT,     /* 雷达点云数据包发布等待 */
         STOP,          /* 雷达停止转动、未启动Driver */

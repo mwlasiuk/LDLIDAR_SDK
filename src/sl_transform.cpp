@@ -21,6 +21,9 @@
 
 #include "ldlidar_driver/sl_transform.h"
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 namespace ldlidar
 {
 
@@ -101,17 +104,21 @@ namespace ldlidar
                 angle += 360;
             }
 
+            double angle_rad = angle * M_PI / 180.0;
+            double x         = n.distance * std::cos(angle_rad);
+            double y         = n.distance * std::sin(angle_rad);
+
             switch (version_)
             {
             case LDType::LD_14:
             case LDType::LD_14P:
                 if (n.distance == 0)
                 {
-                    tmp2.push_back(PointData(angle, n.distance, 0, n.stamp));
+                    tmp2.push_back(PointData(angle, n.distance, 0, n.stamp, x, y));
                 }
                 else
                 {
-                    tmp2.push_back(PointData(angle, n.distance, n.intensity, n.stamp));
+                    tmp2.push_back(PointData(angle, n.distance, n.intensity, n.stamp, x, y));
                 }
                 break;
             default:

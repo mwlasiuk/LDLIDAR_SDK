@@ -19,6 +19,9 @@
  */
 #include "ldlidar_driver/ldlidar_dataprocess.h"
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 namespace ldlidar
 {
 
@@ -124,7 +127,15 @@ namespace ldlidar
                             }
                             data.intensity = datapkg.point[i].intensity;
                             data.stamp     = static_cast<uint64_t>(last_pkg_timestamp_ + (pack_stamp_point_step * i));
-                            tmp_lidar_scan_data_vec_.push_back(PointData(data.angle, data.distance, data.intensity, data.stamp));
+
+                            double angle_rad = data.angle * M_PI / 180.0;
+                            double x         = data.distance * std::cos(angle_rad);
+                            double y         = data.distance * std::sin(angle_rad);
+
+                            data.x = x;
+                            data.y = y;
+
+                            tmp_lidar_scan_data_vec_.push_back(PointData(data.angle, data.distance, data.intensity, data.stamp, x, y));
                         }
                         last_pkg_timestamp_ = current_pack_stamp; //// update last pkg timestamp
                     }
